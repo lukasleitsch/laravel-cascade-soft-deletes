@@ -1,10 +1,10 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
-use Illuminate\Events\Dispatcher;
+use Leitsch\Database\Support\CascadeSoftDeleteException;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager;
-use Dyrynda\Database\Support\CascadeSoftDeleteException;
+use Illuminate\Events\Dispatcher;
+use PHPUnit\Framework\TestCase;
 
 class CascadeSoftDeletesIntegrationTest extends TestCase
 {
@@ -61,7 +61,6 @@ class CascadeSoftDeletesIntegrationTest extends TestCase
             $table->foreign('posttype_id')->references('id')->on('post_types');
         });
     }
-
 
     /** @test */
     public function it_cascades_deletes_when_deleting_a_parent_model()

@@ -1,9 +1,9 @@
 {
-  "name": "dyrynda/laravel-cascade-soft-deletes",
+  "name": "leitsch/laravel-cascade-soft-deletes",
   "description": "Cascading deletes for Eloquent models that implement soft deletes",
   "type": "utility",
   "require": {
-    "php": "^7.3|^8.0",
+    "php": "^8.0",
     "illuminate/database": "^8.12",
     "illuminate/events": "^8.12"
   },
@@ -12,7 +12,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Dyrynda\\Database\\Support\\": "src/"
+      "Leitsch\\Database\\Support\\": "src/"
     }
   },
   "autoload-dev": {

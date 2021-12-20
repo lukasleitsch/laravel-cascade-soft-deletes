@@ -1,9 +1,10 @@
 <?php
 
-namespace Dyrynda\Database\Support;
+namespace Leitsch\Database\Support;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use LogicException;
 
 trait CascadeSoftDeletes
 {
@@ -13,7 +14,7 @@ trait CascadeSoftDeletes
      * Listen for the deleting event of a soft deleting model, and run
      * the delete operation for any configured relationship methods.
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     protected static function bootCascadeSoftDeletes()
     {
@@ -24,13 +25,12 @@ trait CascadeSoftDeletes
         });
     }
 
-
     /**
      * Validate that the calling model is correctly setup for cascading soft deletes.
      *
-     * @throws \Dyrynda\Database\Support\CascadeSoftDeleteException
+     * @throws CascadeSoftDeleteException
      */
-    protected function validateCascadingSoftDelete()
+    protected function validateCascadingSoftDelete(): void
     {
         if (! $this->implementsSoftDeletes()) {
             throw CascadeSoftDeleteException::softDeleteNotImplemented(get_called_class());
@@ -41,27 +41,20 @@ trait CascadeSoftDeletes
         }
     }
 
-
     /**
      * Run the cascading soft delete for this model.
-     *
-     * @return void
      */
-    protected function runCascadingDeletes()
+    protected function runCascadingDeletes(): void
     {
         foreach ($this->getActiveCascadingDeletes() as $relationship) {
             $this->cascadeSoftDeletes($relationship);
         }
     }
 
-
     /**
      * Cascade delete the given relationship on the given mode.
-     *
-     * @param  string  $relationship
-     * @return return
      */
-    protected function cascadeSoftDeletes($relationship)
+    protected function cascadeSoftDeletes(string $relationship): void
     {
         $delete = $this->forceDeleting ? 'forceDelete' : 'delete';
 
@@ -70,51 +63,39 @@ trait CascadeSoftDeletes
         }
     }
 
-
     /**
      * Determine if the current model implements soft deletes.
-     *
-     * @return bool
      */
-    protected function implementsSoftDeletes()
+    protected function implementsSoftDeletes(): bool
     {
         return method_exists($this, 'runSoftDelete');
     }
-
 
     /**
      * Determine if the current model has any invalid cascading relationships defined.
      *
      * A relationship is considered invalid when the method does not exist, or the relationship
      * method does not return an instance of Illuminate\Database\Eloquent\Relations\Relation.
-     *
-     * @return array
      */
-    protected function hasInvalidCascadingRelationships()
+    protected function hasInvalidCascadingRelationships(): array
     {
         return array_filter($this->getCascadingDeletes(), function ($relationship) {
             return ! method_exists($this, $relationship) || ! $this->{$relationship}() instanceof Relation;
         });
     }
 
-
     /**
      * Fetch the defined cascading soft deletes for this model.
-     *
-     * @return array
      */
-    protected function getCascadingDeletes()
+    protected function getCascadingDeletes(): array
     {
         return isset($this->cascadeDeletes) ? (array) $this->cascadeDeletes : [];
     }
 
-
     /**
      * For the cascading deletes defined on the model, return only those that are not null.
-     *
-     * @return array
      */
-    protected function getActiveCascadingDeletes()
+    protected function getActiveCascadingDeletes(): array
     {
         return array_filter($this->getCascadingDeletes(), function ($relationship) {
             return ! is_null($this->{$relationship}());

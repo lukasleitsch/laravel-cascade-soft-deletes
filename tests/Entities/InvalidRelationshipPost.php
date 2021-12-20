@@ -2,13 +2,14 @@
 
 namespace Tests\Entities;
 
+use Leitsch\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 class InvalidRelationshipPost extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes;
+    use SoftDeletes;
+    use CascadeSoftDeletes;
 
     public $dates = ['deleted_at'];
 

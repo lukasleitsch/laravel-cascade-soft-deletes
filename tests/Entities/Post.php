@@ -4,11 +4,12 @@ namespace Tests\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Leitsch\Database\Support\CascadeSoftDeletes;
 
 class Post extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes;
+    use SoftDeletes;
+    use CascadeSoftDeletes;
 
     public $dates = ['deleted_at'];
 
